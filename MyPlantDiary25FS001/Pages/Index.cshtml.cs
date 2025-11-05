@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using PlantPlacesSpecimen;
 
 namespace MyPlantDiary25FS001.Pages
 {
     public class IndexModel : PageModel
     {
+        HttpClient httpClient = new HttpClient();
 
         private readonly ILogger<IndexModel> _logger;
 
@@ -22,6 +25,19 @@ namespace MyPlantDiary25FS001.Pages
                 brand = inBrand;
             }
             ViewData["Brand"] = brand;
+
+            Task<HttpResponseMessage> task = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/specimens.json");
+            HttpResponseMessage result = task.Result;
+            if (result.IsSuccessStatusCode)
+            {
+                Task<string> readString = result.Content.ReadAsStringAsync();
+                string specimentJSON = readString.Result;
+                List<Specimen> specimens = Specimen.FromJson(specimentJSON);
+                int foo = specimens.Count;
+
+            }
+
+
         }
     }
 }
