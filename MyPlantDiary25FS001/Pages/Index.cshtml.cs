@@ -27,13 +27,22 @@ namespace MyPlantDiary25FS001.Pages
             }
             ViewData["Brand"] = brand;
 
-            Task<HttpResponseMessage> plantTask = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/viewplantsjsonarray.json");
+            Task<HttpResponseMessage> plantTask = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/thirstyplants.json");
             HttpResponseMessage plantResult = plantTask.Result;
 
             Task<string> plantStringTask = plantResult.Content.ReadAsStringAsync();
             string plantJSON = plantStringTask.Result;
 
             List<Plant> plants = Plant.FromJson(plantJSON);
+
+            // declare our dictionary.
+            IDictionary<long, Plant> waterLovingPlants = new Dictionary<long, Plant>();
+
+            // populate dictionary from JSON feed of only water loving plants.
+            foreach (Plant plant in plants)
+            {
+                waterLovingPlants[plant.Id] = plant;
+            }
 
 
             Task<HttpResponseMessage> task = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/specimens.json");
@@ -47,8 +56,17 @@ namespace MyPlantDiary25FS001.Pages
                 int foo = specimens.Count;
 
             }
-            ViewData["Specimens"] = specimens;
+            
 
+            List<Specimen> waterLovingSpecimens = new List<Specimen>();
+            foreach(Specimen specimen in specimens)
+            {
+                if (waterLovingPlants.ContainsKey(specimen.PlantId))
+                {
+                    waterLovingSpecimens.Add(specimen);
+                }
+            }
+            ViewData["Specimens"] = waterLovingSpecimens;
 
         }
     }
