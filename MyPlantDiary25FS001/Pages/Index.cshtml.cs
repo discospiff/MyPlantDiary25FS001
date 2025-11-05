@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using PlantPlacesPlants;
 using PlantPlacesSpecimen;
 
 namespace MyPlantDiary25FS001.Pages
@@ -25,6 +26,15 @@ namespace MyPlantDiary25FS001.Pages
                 brand = inBrand;
             }
             ViewData["Brand"] = brand;
+
+            Task<HttpResponseMessage> plantTask = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/viewplantsjsonarray.json");
+            HttpResponseMessage plantResult = plantTask.Result;
+
+            Task<string> plantStringTask = plantResult.Content.ReadAsStringAsync();
+            string plantJSON = plantStringTask.Result;
+
+            List<Plant> plants = Plant.FromJson(plantJSON);
+
 
             Task<HttpResponseMessage> task = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/specimens.json");
             HttpResponseMessage result = task.Result;
