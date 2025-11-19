@@ -14,40 +14,15 @@ namespace MyPlantDiary25FS001
         // GET: api/<ValuesController>
         [HttpGet]
         public IEnumerable<Specimen> Get()
-        {
-            Specimen pawpaw = new Specimen();
-            pawpaw.Genus = "Asimina";
-            pawpaw.Species = "triloba";
-            pawpaw.Common = "Paw Paw";
-            pawpaw.PlantId = 83;
-            pawpaw.SpecimenId = 1;
-
-            Specimen redbud = new Specimen();
-            redbud.Genus = "Cercis";
-            redbud.Species = "canadensis";
-            redbud.Common = "Eastern Redbud";
-            redbud.PlantId = 50;
-            redbud.SpecimenId = 2;
-
-            List<Specimen> specimens = new List<Specimen>();
-            specimens.Add(redbud);
-            specimens.Add(pawpaw);
-
-            return specimens;
-
+        { 
+            return SpecimenRepository.allSpecimens;
         }
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public Specimen Get(int id)
         {
-            Specimen pawpaw = new Specimen();
-            pawpaw.Genus = "Asimina";
-            pawpaw.Species = "triloba";
-            pawpaw.Common = "Paw Paw";
-            pawpaw.PlantId = 83;
-            pawpaw.SpecimenId = 1;
-            return pawpaw;
+            return SpecimenRepository.allSpecimens[id];
         }
 
         // POST api/<ValuesController>
