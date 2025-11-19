@@ -1,10 +1,42 @@
 ﻿@page
+@using PlantPlacesSpecimen
 @model IndexModel
 @{
     ViewData["Title"] = "My Plant Diary";
     var brand = ViewData["Brand"];
+    var weatherMessage = ViewData["WeatherMessage"];
+    List<Specimen> specimens = (List<Specimen>) ViewData["Specimens"];
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome to @brand</h1>
+    <strong>@weatherMessage</strong>
+    <table>
+        <tr>
+            <th>Plant ID</th>
+            <th>Specimen ID</th>
+            <th>Common</th>
+            <th>Genus</th>
+            <th>Species</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Address</th>
+        </tr>
+        @{
+            foreach (Specimen specimen in specimens)
+            {
+               <tr>
+                    <td>@specimen.PlantId</td>
+                    <td>@specimen.SpecimenId</td>
+                    <td>@specimen.Common</td>
+                    <td>@specimen.Genus</td>
+                    <td>@specimen.Species</td>
+                    <td>@specimen.Lat</td>
+                    <td>@specimen.Lng</td>
+                    <td>@specimen.Address</td>
+               </tr> 
+            }
+
+        }
+    </table>
 </div>
