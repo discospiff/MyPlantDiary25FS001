@@ -4,12 +4,13 @@
 @{
     ViewData["Title"] = "My Plant Diary";
     var brand = ViewData["Brand"];
+    var weatherMessage = ViewData["WeatherMessage"];
     List<Specimen> specimens = (List<Specimen>) ViewData["Specimens"];
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome to @brand</h1>
-
+    <strong>@weatherMessage</strong>
     <table>
         <tr>
             <th>Plant ID</th>
