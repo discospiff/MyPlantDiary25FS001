@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using PlantPlacesPlants;
 using PlantPlacesSpecimen;
 using WeatherFeed;
@@ -48,13 +50,32 @@ namespace MyPlantDiary25FS001.Pages
 
             Task<HttpResponseMessage> task = httpClient.GetAsync("https://raw.githubusercontent.com/discospiff/data/refs/heads/main/specimens.json");
             HttpResponseMessage result = task.Result;
+
+
+
             List<Specimen> specimens = new List<Specimen>();
             if (result.IsSuccessStatusCode)
             {
                 Task<string> readString = result.Content.ReadAsStringAsync();
-                string specimentJSON = readString.Result;
-                specimens = Specimen.FromJson(specimentJSON);
-                int foo = specimens.Count;
+                string specimenJSON = readString.Result;
+                JSchema jsonSchema = JSchema.Parse(System.IO.File.ReadAllText("specimenschema.json"));
+                JArray specimenArray = JArray.Parse(specimenJSON);
+
+                IList<string> validationEvents = new List<string>();
+
+                if (specimenArray.IsValid(jsonSchema, out validationEvents)) {
+                    specimens = Specimen.FromJson(specimenJSON);
+                } else
+                {
+                    foreach(string evt in validationEvents)
+                    {
+                        Console.WriteLine(evt);
+                    }
+
+                }
+
+
+                    int foo = specimens.Count;
 
             }
             
