@@ -65,6 +65,7 @@ namespace MyPlantDiary25FS001.Pages
 
                 if (specimenArray.IsValid(jsonSchema, out validationEvents)) {
                     specimens = Specimen.FromJson(specimenJSON);
+                    SpecimenRepository.allSpecimens = specimens;
                 } else
                 {
                     foreach(string evt in validationEvents)
